@@ -13,6 +13,7 @@ public class BasicEnemy : MonoBehaviour
     public bool patrol;
     public bool paused;
     public float speed;
+    public float stall;
     public AIState state;
     public Transform target;
     public Transform[] nodes;
@@ -23,17 +24,10 @@ public class BasicEnemy : MonoBehaviour
 
     public void Start()
     {
-
         Scan();
         patrol = true;
         paused = false;
         state = AIState.PATROL;
-
-        
-        
-
-
-
     }
 
     public void Scan()
@@ -47,32 +41,14 @@ public class BasicEnemy : MonoBehaviour
             LayerMask raymask = LayerMask.GetMask("Level");
 
             // Vector3.Distance(nododo.position, susanrb.position
-            RaycastHit2D hit = Physics2D.Raycast(susanrb.position, direction, Mathf.Infinity, raymask);
+            RaycastHit2D hit = Physics2D.Raycast(susanrb.position, direction, Vector2.Distance(nododo.position, susanrb.position), raymask);
             
                 if (hit.collider == null)
                 {
-
-                   //if (hit.collider.gameObject.tag == "Node")
-                    {
-                    Debug.Log("bingo");
                     AvailableNodes.Add(nododo);
-                    //myListOfItems[Random.Range(0, myListOfItems.Count)];
-                    }  
                 }
-
-
-
-            Debug.Log(raymask.ToString());
-            
-
             
         }
-
-        //foreach (Transform x in AvailableNodes)
-        //{
-        //    Debug.Log(x);
-        //}
-
         ChangeNodeTarget();
     }
 
@@ -124,7 +100,7 @@ public class BasicEnemy : MonoBehaviour
         //where she stops and contemplates life for a moment
         
         
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(stall);
         AvailableNodes.Clear();
         
         
@@ -138,38 +114,4 @@ public class BasicEnemy : MonoBehaviour
 }
 
 
-//foreach (Transform deets in nodes)
-//        {
-//            //print(deets.position);
-//        }
-//print(nodes[Random.Range(0, nodes.Length)]); 
 
-//susanrb.transform.position = (nodes[Random.Range(0,nodes.Length)]).position;
-
-
-//// Move our position a step closer to the target.
-//float step = speed * Time.deltaTime; // calculate distance to move
-//transform.position = Vector3.MoveTowards(transform.position, target.position, step);
-
-//// Check if the position of the cube and sphere are approximately equal.
-//if (Vector3.Distance(transform.position, target.position) < 0.001f)
-//{
-//    // Swap the position of the cylinder.
-//    target.position *= -1.0f;
-//}
-
-
-
-//    float maxRange = 5;
-//    RaycastHit hit;
-
-//    if(Vector3.Distance(transform.position, player.position) < maxRange )
-//   {
-//    if(Physics.Raycast(transform.position, (player.position - transform.position), out hit, maxRange))
-//    {
-//        if(hit.transform == player)
-//        {
-//            // In Range and i can see you!
-//        }
-//    }
-//}

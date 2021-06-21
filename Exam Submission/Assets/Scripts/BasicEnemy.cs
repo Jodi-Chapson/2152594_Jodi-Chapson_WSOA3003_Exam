@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public enum AIState { PATROL, TRACK, SEARCH }
 public class BasicEnemy : MonoBehaviour
 {
@@ -15,83 +16,73 @@ public class BasicEnemy : MonoBehaviour
     public AIState state;
     public Transform target;
     public Transform[] nodes;
-    
+    public List<Transform> AvailableNodes = new List<Transform>();
+    public LayerMask raymask;
     
 
 
     public void Start()
     {
 
-        ChangeNodeTarget();
-        //patrol = true;
+        Scan();
+        patrol = true;
         paused = false;
         state = AIState.PATROL;
 
         
         
+
+
+
     }
 
     public void Scan()
     {
-        //cast a ray to all the nodes and the compile while nodes are visible
-        
-        
+        //cast a ray to all the nodes and keep track of which nodes are visible
+        //puts all the values into the list 
+
+        foreach (Transform nododo in nodes)
         {
-            var direction = target.position - susanrb.transform.position;
-            LayerMask raymask = LayerMask.GetMask("Node", "Level");
+            var direction = nododo.position - susanrb.transform.position;
+            LayerMask raymask = LayerMask.GetMask("Level");
 
+            // Vector3.Distance(nododo.position, susanrb.position
             RaycastHit2D hit = Physics2D.Raycast(susanrb.position, direction, Mathf.Infinity, raymask);
-            Debug.DrawRay(susanrb.position, direction, Color.green);
-
-            if (hit.collider != null)
-            {
-                if (hit.collider.gameObject.tag == "Node")
+            
+                if (hit.collider == null)
                 {
+
+                   //if (hit.collider.gameObject.tag == "Node")
+                    {
                     Debug.Log("bingo");
-                    ChangeNodeTarget();
-                        
+                    AvailableNodes.Add(nododo);
+                    //myListOfItems[Random.Range(0, myListOfItems.Count)];
+                    }  
                 }
-                else
-                {
-                    Debug.Log("who dis");
-                    
-                    ChangeNodeTarget();
-                }
-            }
-
-            //LayerMask mask = LayerMask.GetMask("Wall");
-
-            //// Check if a Wall is hit.
-            //if (Physics.Raycast(transform.position, transform.forward, 20.0f, mask))
 
 
-            //RaycastHit2D hit = Physics2D.Raycast(transform.position, -Vector2.up);
 
-                //RaycastHit hit;
-                //// Does the ray intersect any objects excluding the player layer
-                //if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity, layerMask))
-                //{
-                //    Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-                //    Debug.Log("Did Hit");
-                //}
-                //else
-                //{
-                //    Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000, Color.white);
-                //    Debug.Log("Did not Hit");
-                //}
+            Debug.Log(raymask.ToString());
+            
+
+            
         }
+
+        //foreach (Transform x in AvailableNodes)
+        //{
+        //    Debug.Log(x);
+        //}
+
+        ChangeNodeTarget();
     }
 
     public void Update()
     {
-        var direction = target.position - susanrb.transform.position;
-        Debug.DrawRay(susanrb.position, direction, Color.green);
-
-
         if (Input.GetKeyDown("space"))
         {
             ///temporary thing to trigger the changing of the target node
             //patrol = true;
+            //ChangeNodeTarget();
             //ChangeNodeTarget();
             Scan();
         }
@@ -117,8 +108,11 @@ public class BasicEnemy : MonoBehaviour
     public void ChangeNodeTarget()
     {
         //changing the target node to a different one - and one that is not the one the enemy is currently at
-        // may edit this later to include the players last known location?
-        target = nodes[Random.Range(0, nodes.Length)];
+        // may edit this later to include the players last known location
+
+
+        target = AvailableNodes[Random.Range(0, AvailableNodes.Count)];
+
         if (susanrb.transform.position == target.transform.position)
         {
             ChangeNodeTarget();
@@ -127,8 +121,14 @@ public class BasicEnemy : MonoBehaviour
 
     public IEnumerator Pause ()
     {
+        //where she stops and contemplates life for a moment
+        
+        
         yield return new WaitForSeconds(1f);
-        ChangeNodeTarget();
+        AvailableNodes.Clear();
+        
+        
+        Scan();
         paused = false;
     }
 

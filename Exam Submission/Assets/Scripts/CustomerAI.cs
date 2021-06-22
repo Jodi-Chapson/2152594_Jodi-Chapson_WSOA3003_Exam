@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CustomerAI : MonoBehaviour
 {
-    public enum AIState { PATROL, IDLE}
+    public enum AIState { PATROL, IDLE, TRACK}
 
     [Header("References")]
     public LayerMask raymask;
@@ -17,6 +17,7 @@ public class CustomerAI : MonoBehaviour
     public int rayhit;
     public Transform one, two, three, four;
     public RaycastHit2D hit, hit2;
+    public float walkspeed, chasespeed;
 
 
     
@@ -34,32 +35,61 @@ public class CustomerAI : MonoBehaviour
     void Update()
     {
      
-        
+        if (state == AIState.PATROL)
+        {
+            speed = walkspeed;
+        }
+        else if (state == AIState.TRACK)
+        {
+            speed = chasespeed;
+        }
+        else if (state == AIState.IDLE)
+        {
+            speed = 0;
+        }
+
         if (Input.GetKeyDown("space"))
         {
             Scan();
         }
 
-
-        
-
-
-
         //customer will move towards target position
 
-        if (state == AIState.PATROL)
+        if (state == AIState.PATROL || state == AIState.TRACK)
         {
             this.transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
         }
 
 
-        if (transform.position == target && state == AIState.PATROL)
+        if (transform.position == target)
         {
-            state = AIState.IDLE;
-            StartCoroutine(Idle());
+            if (state == AIState.PATROL)
+            {
+
+                state = AIState.IDLE;
+                StartCoroutine(Idle());
+            }
+            else if (state == AIState.TRACK)
+            {
+                state = AIState.IDLE;
+                StartCoroutine(Idle());
+            }
         }
         
 
+    }
+
+    public void ApproachPlayer( Vector3 playerpos)
+    {
+
+        if (state != AIState.TRACK)
+        {
+
+
+
+            state = AIState.TRACK;
+            target = playerpos;
+        }
     }
 
 
@@ -159,19 +189,22 @@ public class CustomerAI : MonoBehaviour
             rayhit += 1;
         }
 
-        if (rayhit == 2)
+        if (state != AIState.TRACK)
         {
-            //the path is clear
-            //move customer to new location
-            target = endpoint;
-            state = AIState.PATROL;
+            if (rayhit == 2)
+            {
+                //the path is clear
+                //move customer to new location
+                target = endpoint;
+                state = AIState.PATROL;
 
-        }
-        else
-        {
-            //rescan
-            Scan();
+            }
+            else
+            {
+                //rescan
+                Scan();
 
+            }
         }
 
 

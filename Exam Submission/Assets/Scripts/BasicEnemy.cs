@@ -16,9 +16,12 @@ public class BasicEnemy : MonoBehaviour
     public float stall;
     public AIState state;
     public Transform target;
+    public Transform one, two, three, four;
+    
     public Transform[] nodes;
     public List<Transform> AvailableNodes = new List<Transform>();
     public LayerMask raymask;
+    
     
 
 
@@ -35,19 +38,64 @@ public class BasicEnemy : MonoBehaviour
         //cast a ray to all the nodes and keep track of which nodes are visible
         //puts all the values into the list 
 
+        
+        
         foreach (Transform nododo in nodes)
         {
-            var direction = nododo.position - susanrb.transform.position;
+            int rayhit = 0;
+            
             LayerMask raymask = LayerMask.GetMask("Level");
 
-            // Vector3.Distance(nododo.position, susanrb.position
-            RaycastHit2D hit = Physics2D.Raycast(susanrb.position, direction, Vector2.Distance(nododo.position, susanrb.position), raymask);
             
-                if (hit.collider == null)
-                {
-                    AvailableNodes.Add(nododo);
-                }
+            //shoots out four raycast from the positions at the enemy feet to target position
+
+            RaycastHit2D hit, hit2, hit3, hit4;
+
+            var direction = nododo.position - one.transform.position;
+            hit = Physics2D.Raycast(one.position, direction, Vector2.Distance(nododo.position, one.position), raymask);
+
+            if (hit.collider == null)
+            {
+                rayhit += 1;
+            }
+
+            direction = nododo.position - two.transform.position;
+            hit2 = Physics2D.Raycast(two.position, direction, Vector2.Distance(nododo.position, two.position), raymask);
+
+            if (hit2.collider == null)
+            {
+                rayhit += 1;
+            }
+
+
+            direction = nododo.position - three.transform.position;
+            hit3 = Physics2D.Raycast(three.position, direction, Vector2.Distance(nododo.position, three.position), raymask);
+
+            if (hit3.collider == null)
+            {
+                rayhit += 1;
+            }
+
+            direction = nododo.position - four.transform.position;
+            hit4 = Physics2D.Raycast(four.position, direction, Vector2.Distance(nododo.position, four.position), raymask);
+
+            if (hit4.collider == null)
+            {
+                rayhit += 1;
+            }
+
+
+            if (rayhit == 4)
+            {
+                AvailableNodes.Add(nododo);
+            }
+
+
+
+
+
             
+
         }
         ChangeNodeTarget();
     }
@@ -60,7 +108,7 @@ public class BasicEnemy : MonoBehaviour
             //patrol = true;
             //ChangeNodeTarget();
             //ChangeNodeTarget();
-            Scan();
+            //Scan();
         }
 
 

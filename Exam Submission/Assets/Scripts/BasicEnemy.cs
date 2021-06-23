@@ -137,11 +137,20 @@ public class BasicEnemy : MonoBehaviour
         }
 
 
-        if (susanrb.transform.position == target.transform.position || susanrb.transform.position == playerposition)
+        if (susanrb.transform.position == target.transform.position && state == AIState.PATROL)
         {
             if (state != AIState.IDLE)
             {
-                StartCoroutine(Pause());
+                StartCoroutine(Pause(1));
+                state = AIState.IDLE;
+            }
+        }
+
+        if(state == AIState.TRACK && susanrb.transform.position == playerposition)
+        {
+            if (state != AIState.IDLE)
+            {
+                StartCoroutine(Pause(5));
                 state = AIState.IDLE;
             }
         }
@@ -210,12 +219,12 @@ public class BasicEnemy : MonoBehaviour
         }
     }
 
-    public IEnumerator Pause ()
+    public IEnumerator Pause (int modifier)
     {
         //where she stops and contemplates life for a moment
         
         
-        yield return new WaitForSeconds(stall);
+        yield return new WaitForSeconds(stall * modifier);
         AvailableNodes.Clear();
 
 

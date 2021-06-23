@@ -19,6 +19,9 @@ public class BasicEnemy : MonoBehaviour
     public Vector3 playerposition;
     public Transform one, two, three, four;
     public float walkspeed, chasespeed;
+    public GameObject FOV;
+    public Vector3 movementdirection;
+    public float rotationspeed;
     
     public Transform[] nodes;
     public List<Transform> AvailableNodes = new List<Transform>();
@@ -142,6 +145,8 @@ public class BasicEnemy : MonoBehaviour
                 state = AIState.IDLE;
             }
         }
+
+        TurnEyes();
     }
 
     public void ChangeNodeTarget()
@@ -151,7 +156,48 @@ public class BasicEnemy : MonoBehaviour
 
         if (state != AIState.TRACK)
         {
-            target = AvailableNodes[Random.Range(0, AvailableNodes.Count)];
+            if (AvailableNodes.Count != 0)
+            {
+
+                target = AvailableNodes[Random.Range(0, AvailableNodes.Count)];
+            }
+            else
+            {
+                //for the very rare occurance that Susan gets stuck in a shelf or a wall 
+                //she will dislodge herself and go to the nearest node point
+                Debug.Log("oops");
+
+                int currentclosestindex = 0;
+                float closestdistance = 100;
+                
+                
+                for (int i = 0; i < nodes.Length; i++)
+                {
+                    float dst = Vector3.Distance(susanrb.position, nodes[i].position);
+
+                    if (i == 0)
+                    {
+                        currentclosestindex = i;
+                        closestdistance = dst;
+                    }
+                    else if (i > 0)
+                    {
+                        if(dst < closestdistance)
+                        {
+                            closestdistance = dst;
+                            currentclosestindex = i;
+                        }
+                    }
+
+
+                }
+
+                target = nodes[currentclosestindex];
+
+
+                //for (int i = 0; i < targetsInViewRadius.Length; i++)
+
+            }
 
             if (susanrb.transform.position == target.transform.position)
             {
@@ -230,6 +276,7 @@ public class BasicEnemy : MonoBehaviour
         {
             playerposition = playerpos;
             state = AIState.TRACK;
+            
         }
 
 
@@ -240,7 +287,36 @@ public class BasicEnemy : MonoBehaviour
 
     }
 
-    
+    public void TurnEyes()
+    {
+        //this is supposed to turn Susans eye direction to match her movement direction (i.e fov)
+
+        //movementDirection = new Vector3(Random.Range(-1.0f, 1.0f), 0, Random.Range(-1.0f, 1.0f)).normalized;
+
+        if (state == AIState.PATROL)
+        {
+            movementdirection = new Vector3(target.transform.position.x - susanrb.transform.position.x, target.transform.position.y - susanrb.transform.position.y, 0).normalized;
+        }
+        else if (state == AIState.TRACK)
+        {
+            movementdirection = new Vector3(playerposition.x - susanrb.transform.position.x, playerposition.y - susanrb.transform.position.y, 0).normalized;
+        }
+
+
+
+        Quaternion rotation = Quaternion.LookRotation(Vector3.forward, movementdirection);
+
+        
+        FOV.transform.rotation = Quaternion.RotateTowards(FOV.transform.rotation, rotation, rotationspeed * Time.deltaTime);
+        
+        
+        
+
+
+
+    }
+
+
 
 
 

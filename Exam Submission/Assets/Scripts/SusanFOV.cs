@@ -41,6 +41,8 @@ public class SusanFOV : MonoBehaviour
 
                 Transform playertarget = playerping.transform;
 
+                
+
                 if (Vector3.Angle(transform.up, dirToPlayer) < viewAngle / 2)
                 {
                     float dstToPlayer = Vector3.Distance(transform.position, playertarget.transform.position);

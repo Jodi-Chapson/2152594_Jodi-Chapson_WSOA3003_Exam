@@ -8,6 +8,7 @@ public class TaskManager : MonoBehaviour
     public int completedtask;
     public bool canleave;
     public Animator Fade;
+    public Player _player;
 
 
 
@@ -95,6 +96,7 @@ public class TaskManager : MonoBehaviour
 
         if (type == 0)
         {
+            _player.canmove = false;
             Fade.gameObject.SetActive(true);
             Fade.Play("FadeIn", 0, 0.0f);
 
@@ -107,9 +109,10 @@ public class TaskManager : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
 
             Fade.gameObject.SetActive(false);
+            _player.canmove = true;
 
 
-            
+
         }
 
         

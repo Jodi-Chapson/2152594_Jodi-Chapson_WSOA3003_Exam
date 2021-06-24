@@ -12,6 +12,7 @@ public class CodeTask : MonoBehaviour
     public GameObject arrow, exit;
     public Transform taskpos1, taskpos2;
     public GameObject triggernode;
+    public DoorController doorcontrol;
     
 
 
@@ -128,7 +129,7 @@ public class CodeTask : MonoBehaviour
         {
             //desummon task and get the doors open :)
             inputCode.text = "--";
-            
+            doorcontrol.MoveDoors();
 
 
 

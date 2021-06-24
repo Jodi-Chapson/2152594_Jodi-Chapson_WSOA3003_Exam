@@ -72,7 +72,7 @@ public class Card : MonoBehaviour, IDragHandler
 
     public IEnumerator ToggleBool(int type)
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1f);
 
         if (type == 0)
         {

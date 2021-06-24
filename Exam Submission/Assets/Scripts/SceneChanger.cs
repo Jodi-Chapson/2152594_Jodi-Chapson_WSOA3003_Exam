@@ -23,4 +23,20 @@ public class SceneChanger : MonoBehaviour
 
 
     }
+
+    public void ToggleObjectOff(GameObject target)
+    {
+        
+            //set inactive
+            target.SetActive(false);
+        
+    }
+
+    public void ToggleObjectOn(GameObject target)
+    {
+        //set active
+        target.SetActive(true);
+    }
+
+    
 }

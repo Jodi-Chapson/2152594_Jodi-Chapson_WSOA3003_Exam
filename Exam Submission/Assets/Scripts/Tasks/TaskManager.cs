@@ -8,13 +8,19 @@ public class TaskManager : MonoBehaviour
     public int completedtask;
     public bool canleave;
 
-    public int activetaskindex;
-    public GameObject activetask;
     
 
 
 
-   public void Unlock()
+    [Header("Tasks Info")]
+    public Transform taskpos1, taskpos2;
+    public float lerp = 2;
+    public int activetaskindex;
+    public GameObject activetask;
+
+
+
+    public void Unlock()
     {
         //doors open
 
@@ -47,5 +53,24 @@ public class TaskManager : MonoBehaviour
                 canleave = true;
             }
         }
+    }
+
+    public void End( int conclusion)
+    {
+
+        //conclusion = 0 means a win
+        //conclusion = 1 means a lose
+
+
+        if (conclusion == 0)
+        {
+
+        }
+        else if (conclusion == 1)
+        {
+
+        }
+
+
     }
 }

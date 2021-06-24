@@ -3683,6 +3683,7 @@ GameObject:
   m_Component:
   - component: {fileID: 934255110}
   - component: {fileID: 934255111}
+  - component: {fileID: 934255112}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -3716,6 +3717,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3530453474ecf6c478854656b54393c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &934255112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 934255109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23c02604fad7aab438c14e24ab4d257b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tasknumber: 0
+  completedtask: 0
+  canleave: 0
+  activetaskindex: 0
+  activetask: {fileID: 0}
 --- !u!1 &951158592
 GameObject:
   m_ObjectHideFlags: 0
@@ -4038,7 +4056,7 @@ GameObject:
   - component: {fileID: 1109066727}
   - component: {fileID: 1109066726}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: TASK CANVAS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4759,7 +4777,7 @@ GameObject:
   - component: {fileID: 1276426020}
   - component: {fileID: 1276426019}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: CANVAS CANVAS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6390,10 +6408,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   longhand: {fileID: 507255840}
   shorthand: {fileID: 1717359416}
-  degrees: 1
+  degrees: 0.5
   stopped: 0
   maxTime: 0
+  bossTime: 0
   time: 0
+  delayed: 0
+  delaytime: 0
+  maxdelaytime: 3
+  ended: 0
+  bossreleased: 0
+  _taskmanager: {fileID: 0}
 --- !u!1 &1772344736
 GameObject:
   m_ObjectHideFlags: 0

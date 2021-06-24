@@ -11,15 +11,15 @@ public class PunchInTask : MonoBehaviour
     public GameObject arrow, exitbutton;
     public Text scantext;
     public GameObject card;
-    public Transform taskpos1, taskpos2;
+    
     public bool summoning, desummoning;
-    public float lerp = 2;
+    
 
     public bool countup;
     void Start()
     {
         countup = false;
-        this.transform.position = taskpos1.position;
+        this.transform.position = tmanager.taskpos1.position;
         tmanager.tasknumber++;
         
     }
@@ -27,10 +27,10 @@ public class PunchInTask : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown("w"))
-        {
-            SummonTask();
-        }
+        //if (Input.GetKeyDown("w"))
+        //{
+        //    SummonTask();
+        //}
         
 
         if (countup)
@@ -58,13 +58,13 @@ public class PunchInTask : MonoBehaviour
 
         if (summoning)
         {
-            float yvalue = Mathf.Lerp(this.transform.position.y, taskpos2.transform.position.y, lerp * Time.deltaTime);
+            float yvalue = Mathf.Lerp(this.transform.position.y, tmanager.taskpos2.transform.position.y, tmanager.lerp * Time.deltaTime);
             this.transform.position = new Vector3(this.transform.position.x, yvalue, this.transform.position.z);
         }
 
         if (desummoning)
         {
-            float yvalue = Mathf.Lerp(this.transform.position.y, taskpos1.transform.position.y, lerp * Time.deltaTime);
+            float yvalue = Mathf.Lerp(this.transform.position.y, tmanager.taskpos1.transform.position.y, tmanager.lerp * Time.deltaTime);
             this.transform.position = new Vector3(this.transform.position.x, yvalue, this.transform.position.z);
         }
 

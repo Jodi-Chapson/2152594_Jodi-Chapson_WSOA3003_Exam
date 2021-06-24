@@ -10,6 +10,9 @@ public class CodeTask : MonoBehaviour
     public Text inputCode;
     public TaskManager tmanager;
     public GameObject arrow, exit;
+    public Transform taskpos1, taskpos2;
+    public GameObject triggernode;
+    
 
 
     public int codelength;
@@ -22,7 +25,7 @@ public class CodeTask : MonoBehaviour
 
     public void Start()
     {
-        this.transform.position = new Vector3(this.transform.position.x, tmanager.taskpos1.position.y, this.transform.position.z);
+        //this.transform.position = new Vector3(this.transform.position.x, tmanager.taskpos1.position.y, this.transform.position.z);
         tmanager.tasknumber++;
 
         codelength = Random.Range(4, 6);
@@ -39,6 +42,9 @@ public class CodeTask : MonoBehaviour
         cardCode.text = code;
         inputCode.text = "--";
 
+
+        gameObject.SetActive(false);
+
     }
 
     public void Update()
@@ -46,22 +52,22 @@ public class CodeTask : MonoBehaviour
         //for testing purposes
 
         
-        if (Input.GetKeyDown("w"))
-        {
-            SummonTask();
-        }
+        //if (Input.GetKeyDown("w"))
+        //{
+        //    SummonTask();
+        //}
 
 
 
         if (summoning)
         {
-            float yvalue = Mathf.Lerp(this.transform.position.y, tmanager.taskpos2.transform.position.y, tmanager.lerp * Time.deltaTime);
+            float yvalue = Mathf.Lerp(this.transform.position.y, taskpos2.transform.position.y, tmanager.lerp * Time.deltaTime);
             this.transform.position = new Vector3(this.transform.position.x, yvalue, this.transform.position.z);
         }
 
         if (desummoning)
         {
-            float yvalue = Mathf.Lerp(this.transform.position.y, tmanager.taskpos1.transform.position.y, tmanager.lerp * Time.deltaTime);
+            float yvalue = Mathf.Lerp(this.transform.position.y, taskpos1.transform.position.y, tmanager.lerp * Time.deltaTime);
             this.transform.position = new Vector3(this.transform.position.x, yvalue, this.transform.position.z);
         }
 
@@ -88,6 +94,7 @@ public class CodeTask : MonoBehaviour
         {
             Debug.Log("yippie ka yey i cant spell");
             inputCode.text = "CORRECT";
+            triggernode.GetComponent<TaskTrigger>().activated = false;
             StartCoroutine(Reset(0));
 
 
@@ -115,13 +122,13 @@ public class CodeTask : MonoBehaviour
         yield return new WaitForSeconds(resetTime);
 
 
-        Debug.Log("resetting");
+       
         
         if (conclusion == 0)
         {
             //desummon task and get the doors open :)
             inputCode.text = "--";
-            Debug.Log("win");
+            
 
 
 
@@ -132,7 +139,7 @@ public class CodeTask : MonoBehaviour
         else if (conclusion == 1)
         {
             inputCode.text = "--";
-            Debug.Log("lose");
+            
         }
 
         isResetting = false;
@@ -141,6 +148,9 @@ public class CodeTask : MonoBehaviour
 
     public void SummonTask()
     {
+        card.gameObject.SetActive(true);
+        
+        StartCoroutine(tmanager.FadeEffect(0));
         summoning = true;
         StartCoroutine(ToggleBool(0));
 
@@ -151,7 +161,7 @@ public class CodeTask : MonoBehaviour
     public void DesummonTask()
     {
         //if a task is closed
-
+        StartCoroutine(tmanager.FadeEffect(1));
         desummoning = true;
         exit.SetActive(false);
         arrow.SetActive(false);
@@ -177,6 +187,7 @@ public class CodeTask : MonoBehaviour
         else if (type == 1)
         {
             desummoning = false;
+            card.gameObject.SetActive(false);
         }
     }
 

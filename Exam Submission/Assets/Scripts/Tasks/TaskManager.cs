@@ -7,16 +7,26 @@ public class TaskManager : MonoBehaviour
     public int tasknumber;
     public int completedtask;
     public bool canleave;
+    public Animator Fade;
 
-    
+
 
 
 
     [Header("Tasks Info")]
-    public Transform taskpos1, taskpos2;
+
+    
+    
     public float lerp = 2;
     public int activetaskindex;
     public GameObject activetask;
+
+
+    //task indexs:
+    // 0 == punchin
+    // 1 == keycode
+    // 2 == till
+    //etc etc, add as we go
 
 
 
@@ -71,6 +81,39 @@ public class TaskManager : MonoBehaviour
 
         }
 
+
+    }
+
+    public IEnumerator FadeEffect (int type)
+    {
+
+        //type = 0 means fade to black
+        // type = 1 means fade out from black
+
+
+        
+
+        if (type == 0)
+        {
+            Fade.gameObject.SetActive(true);
+            Fade.Play("FadeIn", 0, 0.0f);
+
+            
+        }
+        else if (type == 1)
+        {
+            Fade.Play("FadeOut", 0, 0.0f);
+            
+            yield return new WaitForSeconds(0.5f);
+
+            Fade.gameObject.SetActive(false);
+
+
+            
+        }
+
+        
+        
 
     }
 }

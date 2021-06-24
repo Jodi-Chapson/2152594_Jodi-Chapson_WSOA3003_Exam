@@ -58,6 +58,7 @@ public class Card : MonoBehaviour, IDragHandler
     {
         button.SetActive(false);
         summoning = true;
+        this.gameObject.SetActive(true);
         StartCoroutine(ToggleBool(0));
 
     }

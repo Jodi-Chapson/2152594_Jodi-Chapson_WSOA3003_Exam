@@ -11,7 +11,11 @@ public class PunchInTask : MonoBehaviour
     public GameObject arrow, exitbutton;
     public Text scantext;
     public GameObject card;
+    public Transform taskpos1;
+    public Transform taskpos2;
     
+    public GameObject triggernode;
+
     public bool summoning, desummoning;
     
 
@@ -19,7 +23,7 @@ public class PunchInTask : MonoBehaviour
     void Start()
     {
         countup = false;
-        this.transform.position = tmanager.taskpos1.position;
+        //this.transform.position = tmanager.taskpos1.position;
         tmanager.tasknumber++;
         
     }
@@ -37,7 +41,7 @@ public class PunchInTask : MonoBehaviour
         { countdown += Time.deltaTime; }
 
 
-        if (countdown >= maxTimer)
+        if (countdown >= maxTimer && countup == true)
         {
             countup = false;
             countdown = 0;
@@ -46,6 +50,7 @@ public class PunchInTask : MonoBehaviour
             if (!tmanager.canleave)
             {
                 scantext.text = "WELCOME :)";
+                triggernode.GetComponent<TaskTrigger>().activated = false;
                 StartCoroutine(EndTask());
             }
             else if (tmanager.canleave)
@@ -58,17 +63,19 @@ public class PunchInTask : MonoBehaviour
 
         if (summoning)
         {
-            float yvalue = Mathf.Lerp(this.transform.position.y, tmanager.taskpos2.transform.position.y, tmanager.lerp * Time.deltaTime);
+            float yvalue = Mathf.Lerp(this.transform.position.y, taskpos2.transform.position.y, tmanager.lerp * Time.deltaTime);
             this.transform.position = new Vector3(this.transform.position.x, yvalue, this.transform.position.z);
         }
 
         if (desummoning)
         {
-            float yvalue = Mathf.Lerp(this.transform.position.y, tmanager.taskpos1.transform.position.y, tmanager.lerp * Time.deltaTime);
+            float yvalue = Mathf.Lerp(this.transform.position.y, taskpos1.transform.position.y, tmanager.lerp * Time.deltaTime);
             this.transform.position = new Vector3(this.transform.position.x, yvalue, this.transform.position.z);
         }
 
 
+
+        
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -97,6 +104,8 @@ public class PunchInTask : MonoBehaviour
     public void SummonTask()
     {
         
+        card.gameObject.SetActive(true);
+        StartCoroutine(tmanager.FadeEffect(0));
         summoning = true;
         StartCoroutine(ToggleBool(0));
 
@@ -120,6 +129,7 @@ public class PunchInTask : MonoBehaviour
         else if (type == 1)
         {
             desummoning = false;
+            card.gameObject.SetActive(false);
         }
     }
 
@@ -127,8 +137,11 @@ public class PunchInTask : MonoBehaviour
 
     public void DeSummonTask()
     {
+        
+        
+        
         //if a task is closed
-
+        StartCoroutine(tmanager.FadeEffect(1));
         desummoning = true;
         exitbutton.SetActive(false);
         arrow.SetActive(false);
@@ -145,6 +158,9 @@ public class PunchInTask : MonoBehaviour
 
     public IEnumerator EndTask()
     {
+
+        StartCoroutine(tmanager.FadeEffect(1));
+
         card.GetComponent<Card>().DeSummon();
         
         yield return new WaitForSeconds(1f);
@@ -158,6 +174,7 @@ public class PunchInTask : MonoBehaviour
 
 
         tmanager.completedtask++;
+        card.gameObject.SetActive(false);
         
 
         //pokes the task manager

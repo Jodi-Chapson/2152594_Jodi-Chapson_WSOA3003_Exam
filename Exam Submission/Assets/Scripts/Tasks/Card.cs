@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Card : MonoBehaviour
+public class Card : MonoBehaviour, IDragHandler
 {
     public Transform pos1, pos2;
+    public Canvas _canvas;
 
     public bool summoning;
     public bool desummoning;
@@ -14,12 +16,17 @@ public class Card : MonoBehaviour
     public void Awake()
     {
         this.transform.position = pos1.position;
+        _canvas = GetComponentInParent<Canvas>();
 
         summoning = false;
-
-        
     }
 
+    public void OnDrag(PointerEventData eventData)
+    {
+        Vector2 pos;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvas.transform as RectTransform, eventData.position, _canvas.worldCamera, out pos);
+        transform.position = _canvas.transform.TransformPoint(pos);
+    }
 
 
     public void Update()

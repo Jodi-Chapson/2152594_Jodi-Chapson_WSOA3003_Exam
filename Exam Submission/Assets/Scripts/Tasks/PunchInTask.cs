@@ -21,6 +21,7 @@ public class PunchInTask : MonoBehaviour
         countup = false;
         this.transform.position = taskpos1.position;
         tmanager.tasknumber++;
+        
     }
 
     // Update is called once per frame
@@ -30,10 +31,7 @@ public class PunchInTask : MonoBehaviour
         {
             SummonTask();
         }
-        if (Input.GetKeyDown("s"))
-        {
-            DeSummonTask();
-        }
+        
 
         if (countup)
         { countdown += Time.deltaTime; }
@@ -54,6 +52,7 @@ public class PunchInTask : MonoBehaviour
             {
                 scantext.text = "GOODBYE :)";
                 StartCoroutine(EndTask());
+                tmanager.Unlock();
             }
         }
 
@@ -101,6 +100,9 @@ public class PunchInTask : MonoBehaviour
         summoning = true;
         StartCoroutine(ToggleBool(0));
 
+        tmanager.activetaskindex = 0;
+        tmanager.activetask = this.gameObject;
+
     }
 
     public IEnumerator ToggleBool( int type )
@@ -145,7 +147,7 @@ public class PunchInTask : MonoBehaviour
     {
         card.GetComponent<Card>().DeSummon();
         
-        yield return new WaitForSeconds(0.75f);
+        yield return new WaitForSeconds(1f);
         desummoning = true;
         yield return new WaitForSeconds(1f);
 

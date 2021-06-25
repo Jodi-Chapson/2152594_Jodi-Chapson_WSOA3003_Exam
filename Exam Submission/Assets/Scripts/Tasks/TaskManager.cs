@@ -15,6 +15,9 @@ public class TaskManager : MonoBehaviour
     public GameObject tasklist;
     public bool signedin;
 
+    public GameObject tabnotif;
+    public TaskTrigger node0, node1, node2, node3, node4;
+
 
 
 
@@ -51,13 +54,18 @@ public class TaskManager : MonoBehaviour
         //each index represents the task
 
         
-        if (_player.canmove == true)
-        { return; }
+        
 
         if(_player.interrupted)
         {
             return;
         }
+
+        if (!_player.busy)
+        {
+            return;
+        }
+        
 
         
 
@@ -71,12 +79,24 @@ public class TaskManager : MonoBehaviour
             activetask.GetComponent<CodeTask>().DesummonTask();
         }
 
+        else if (activetaskindex == 2)
+        {
+            activetask.GetComponent<MopTask>().DesummonTask();
+        }
+
 
 
 
     }
 
-
+    public void NotifyTasks()
+    {
+        node1.activated = true;
+        node2.activated = true;
+        node3.activated = true;
+        node4.activated = true;
+        tabnotif.SetActive(true);
+    }
 
 
     public void Update()
@@ -84,9 +104,19 @@ public class TaskManager : MonoBehaviour
 
         if (signedin)
         {
+            
             if (Input.GetKeyDown("tab"))
             {
+                
+                if(tabnotif.activeSelf == true)
+                {
+                    tabnotif.SetActive(false);
+                }
+
+
                 tasklist.SetActive(true);
+                
+                
             }
         }
 
@@ -98,7 +128,7 @@ public class TaskManager : MonoBehaviour
         
         if (completedtask != 0)
         {
-            if (completedtask >= tasknumber)
+            if (completedtask >= tasknumber && canleave == false)
             {
                 canleave = true;
                 punchinnode.activated = true;

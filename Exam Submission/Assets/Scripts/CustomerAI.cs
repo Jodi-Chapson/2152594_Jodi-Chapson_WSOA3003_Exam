@@ -21,6 +21,7 @@ public class CustomerAI : MonoBehaviour
     public Transform one, two, three, four;
     public RaycastHit2D hit, hit2;
     public float walkspeed, chasespeed;
+    public GameObject exclamation;
 
 
     [Header("Pestering References")]
@@ -95,6 +96,16 @@ public class CustomerAI : MonoBehaviour
                 state = AIState.IDLE;
                 StartCoroutine(Idle());
             }
+        }
+
+
+        if(onCD)
+        {
+            exclamation.SetActive(false);
+        }
+        else
+        {
+            exclamation.SetActive(true);
         }
         
 
@@ -241,19 +252,29 @@ public class CustomerAI : MonoBehaviour
     public IEnumerator PreparingPester()
     {
         state = AIState.PESTERING;
-        tmanager.Interrupt();
-        player.interrupted = true;
-        //player.canmove = false;
-        if (!player.canmove)
-        {
-            
-            yield return new WaitForSeconds(1f);
-        }
-        else
-        {
+        
+        
+            tmanager.Interrupt();
+            player.interrupted = true;
+
+            if (!player.canmove)
+            {
+
+                yield return new WaitForSeconds(1f);
+            }
+            else
+            {
+                player.canmove = false;
+                player.rb.velocity = Vector3.zero;
+            }
+        
+        
+        
             player.canmove = false;
-        }
+            player.rb.velocity = Vector3.zero;
+        
         player.pesteringcustomers++;
+
         Pester();
     }
 
@@ -261,7 +282,7 @@ public class CustomerAI : MonoBehaviour
     {
         
 
-        int random = Random.Range(0, 3);
+        int random = Random.Range(0, dialogueoptions.Length);
 
         dialogue.text = dialogueoptions[random];
         correctchoice = dialoguechoices[random];
@@ -274,7 +295,7 @@ public class CustomerAI : MonoBehaviour
         //with a random question
         //each paired with a random answer
         
-        Debug.Log("customer being a betch :)");
+        
     }
 
 
@@ -305,6 +326,7 @@ public class CustomerAI : MonoBehaviour
                 player.canmove = true;
             }
 
+            player.interrupted = false;
             currentCD = pesteringCD;
             onCD = true;
             state = AIState.IDLE;
@@ -325,7 +347,7 @@ public class CustomerAI : MonoBehaviour
         {
             player = collision.gameObject.GetComponent<Player>();
 
-            if (state != AIState.PESTERING)
+            if (state != AIState.PESTERING && !onCD)
             {
                 StartCoroutine(PreparingPester());
             }

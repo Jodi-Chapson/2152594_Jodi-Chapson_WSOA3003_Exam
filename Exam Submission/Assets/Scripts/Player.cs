@@ -12,12 +12,14 @@ public class Player : MonoBehaviour
     public float percentMod;
     public bool interrupted;
     public int pesteringcustomers;
+    public bool busy;
 
     void Start()
     {
         canmove = true;
         interrupted = false;
         pesteringcustomers = 0;
+        busy = false;
     }
 
     

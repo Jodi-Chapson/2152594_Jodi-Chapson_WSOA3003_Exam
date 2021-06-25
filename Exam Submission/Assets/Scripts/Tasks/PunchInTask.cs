@@ -13,6 +13,7 @@ public class PunchInTask : MonoBehaviour
     public GameObject card;
     public Transform taskpos1;
     public Transform taskpos2;
+    public Player player;
     
     
     public GameObject triggernode;
@@ -55,10 +56,14 @@ public class PunchInTask : MonoBehaviour
                 tmanager.signedin = true;
                 triggernode.GetComponent<TaskTrigger>().activated = false;
                 StartCoroutine(EndTask());
+
+                tmanager.NotifyTasks();
             }
             else if (tmanager.canleave)
             {
                 scantext.text = "GOODBYE :)";
+                triggernode.GetComponent<TaskTrigger>().activated = false;
+
                 StartCoroutine(EndTask());
                 tmanager.Unlock();
             }
@@ -102,7 +107,7 @@ public class PunchInTask : MonoBehaviour
 
     public void SummonTask()
     {
-        
+        player.busy = true;
         card.gameObject.SetActive(true);
         StartCoroutine(tmanager.FadeEffect(0));
         summoning = true;
@@ -110,6 +115,7 @@ public class PunchInTask : MonoBehaviour
 
         tmanager.activetaskindex = 0;
         tmanager.activetask = this.gameObject;
+        
 
     }
 
@@ -136,6 +142,7 @@ public class PunchInTask : MonoBehaviour
 
     public void DeSummonTask()
     {
+        player.busy = false;
         this.transform.position = taskpos1.position;
         
         
@@ -157,6 +164,7 @@ public class PunchInTask : MonoBehaviour
 
     public IEnumerator EndTask()
     {
+        player.busy = false;
         this.transform.position = taskpos1.position;
 
         StartCoroutine(tmanager.FadeEffect(1));

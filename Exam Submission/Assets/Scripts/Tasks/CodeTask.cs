@@ -13,7 +13,7 @@ public class CodeTask : MonoBehaviour
     public Transform taskpos1, taskpos2;
     public GameObject triggernode;
     public DoorController doorcontrol;
-    
+    public Player player;
 
 
     public int codelength;
@@ -89,7 +89,7 @@ public class CodeTask : MonoBehaviour
 
         if (inputCode.text == cardCode.text)
         {
-            Debug.Log("yippie ka yey i cant spell");
+            
             inputCode.text = "CORRECT";
             tmanager.completedtask++;
             triggernode.GetComponent<TaskTrigger>().activated = false;
@@ -146,6 +146,7 @@ public class CodeTask : MonoBehaviour
 
     public void SummonTask()
     {
+        player.busy = true;
         card.gameObject.SetActive(true);
         
         StartCoroutine(tmanager.FadeEffect(0));
@@ -159,6 +160,7 @@ public class CodeTask : MonoBehaviour
     public void DesummonTask()
     {
         //if a task is closed
+        player.busy = false;
         this.transform.position = taskpos1.position;
         StartCoroutine(tmanager.FadeEffect(1));
         

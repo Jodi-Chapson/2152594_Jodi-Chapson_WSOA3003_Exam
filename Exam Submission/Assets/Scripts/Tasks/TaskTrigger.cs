@@ -11,13 +11,13 @@ public class TaskTrigger : MonoBehaviour
     public int taskIndex;
     public bool activated;
     public Player player;
-    
+    public GameObject Arrow;
     
 
     public void Start()
     {
         canInteract = false;
-        activated = true;
+        
         
     }
 
@@ -54,12 +54,24 @@ public class TaskTrigger : MonoBehaviour
                 {
                     //till task
                     //will add this later
+                    task.GetComponent<MopTask>().SummonTask();
                     
                 }
 
 
 
             }
+        }
+
+
+        if (activated)
+        {
+            Arrow.SetActive(true);
+
+        }
+        else
+        {
+            Arrow.SetActive(false);
         }
 
 

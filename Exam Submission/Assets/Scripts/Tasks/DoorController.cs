@@ -12,8 +12,8 @@ public class DoorController : MonoBehaviour
     public void Start()
     {
         doorsmove = false;
-        leftnewpos = new Vector3(leftdoor.transform.position.x-4, leftdoor.transform.position.y, leftdoor.transform.position.z);
-        rightnewpos = new Vector3(rightdoor.transform.position.x+4, rightdoor.transform.position.y, rightdoor.transform.position.z);
+        leftnewpos = new Vector3(leftdoor.transform.position.x-1.5f, leftdoor.transform.position.y, leftdoor.transform.position.z);
+        rightnewpos = new Vector3(rightdoor.transform.position.x+1.5f, rightdoor.transform.position.y, rightdoor.transform.position.z);
 
     }
     public void Update()

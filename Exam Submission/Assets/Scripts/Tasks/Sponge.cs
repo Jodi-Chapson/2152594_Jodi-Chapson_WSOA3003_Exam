@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Beans : MonoBehaviour,  IDragHandler
+public class Sponge : MonoBehaviour, IDragHandler
 {
     public Canvas _canvas;
-
-    public void Awake()
+    
+    // Start is called before the first frame update
+    void Start()
     {
         
-        _canvas = GetComponentInParent<Canvas>();
-
-        
     }
+
     public void OnDrag(PointerEventData eventData)
     {
         Vector2 pos;

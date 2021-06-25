@@ -22,7 +22,7 @@ public class CustomerAI : MonoBehaviour
     public RaycastHit2D hit, hit2;
     public float walkspeed, chasespeed;
     public GameObject exclamation;
-
+    public bool submitted;
 
     [Header("Pestering References")]
     public GameObject dialoguebox;
@@ -55,6 +55,7 @@ public class CustomerAI : MonoBehaviour
         else
         {
             onCD = false;
+            submitted = false;
         }
 
         if (state == AIState.PATROL)
@@ -301,44 +302,52 @@ public class CustomerAI : MonoBehaviour
 
     public void PassOnResults(int result)
     {
-        StartCoroutine(Thinking(result));
+        if (!submitted)
+        {
+            submitted = true;
+            StartCoroutine(Thinking(result));
+        }
     }
 
     public IEnumerator Thinking(int results)
     {
-        dialogue.text = "...";
 
-        yield return new WaitForSeconds(0.25f);
-
-
-        if (results == correctchoice)
+        if (!onCD)
         {
-            dialogue.text = ":)";
-            player.pesteringcustomers -= 1;
-
-            yield return new WaitForSeconds(0.5f);
-
-
             dialogue.text = "...";
-            dialoguebox.SetActive(false);
-            if (player.pesteringcustomers == 0)
+
+            
+
+
+            if (results == correctchoice)
             {
-                player.canmove = true;
+                dialogue.text = ":)";
+                player.pesteringcustomers -= 1;
+
+                yield return new WaitForSeconds(0.5f);
+
+
+                dialogue.text = "...";
+                dialoguebox.SetActive(false);
+                if (player.pesteringcustomers <= 0)
+                {
+                    player.canmove = true;
+                }
+
+                player.interrupted = false;
+                currentCD = pesteringCD;
+                onCD = true;
+                state = AIState.IDLE;
+                Scan();
+
             }
-
-            player.interrupted = false;
-            currentCD = pesteringCD;
-            onCD = true;
-            state = AIState.IDLE;
-            Scan();
-
+            else
+            {
+                Debug.Log("incorrect");
+                Pester();
+            }
         }
-        else
-        {
-            Debug.Log("incorrect");
-            Pester();
-        }
-
+        
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

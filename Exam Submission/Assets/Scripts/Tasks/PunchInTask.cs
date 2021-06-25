@@ -14,7 +14,7 @@ public class PunchInTask : MonoBehaviour
     public Transform taskpos1;
     public Transform taskpos2;
     public Player player;
-    
+    public bool desummoning;
     
     public GameObject triggernode;
 
@@ -69,7 +69,7 @@ public class PunchInTask : MonoBehaviour
             }
         }
 
-        if (summoning)
+        if (summoning && !desummoning)
         {
             float yvalue = Mathf.Lerp(this.transform.position.y, taskpos2.transform.position.y, tmanager.lerp * Time.deltaTime);
             this.transform.position = new Vector3(this.transform.position.x, yvalue, this.transform.position.z);
@@ -133,7 +133,7 @@ public class PunchInTask : MonoBehaviour
         }
         else if (type == 1)
         {
-            
+            desummoning = false;
             card.gameObject.SetActive(false);
         }
     }
@@ -143,7 +143,9 @@ public class PunchInTask : MonoBehaviour
     public void DeSummonTask()
     {
         player.busy = false;
+        desummoning = true;
         this.transform.position = taskpos1.position;
+        
         
         
         //if a task is closed

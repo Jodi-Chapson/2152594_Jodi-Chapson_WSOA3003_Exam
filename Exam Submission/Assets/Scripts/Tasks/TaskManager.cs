@@ -20,7 +20,7 @@ public class TaskManager : MonoBehaviour
     public TaskTrigger node0, node1, node2, node3, node4, node5;
     public int mop;
     public GameObject tick1, tick2, tick3;
-
+    
 
 
 

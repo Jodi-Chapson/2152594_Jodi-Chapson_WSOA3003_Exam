@@ -14,7 +14,7 @@ public class CodeTask : MonoBehaviour
     public GameObject triggernode;
     public DoorController doorcontrol;
     public Player player;
-
+    public bool desummoning;
 
     public int codelength;
 
@@ -60,7 +60,7 @@ public class CodeTask : MonoBehaviour
 
 
 
-        if (summoning)
+        if (summoning && !desummoning)
         {
             float yvalue = Mathf.Lerp(this.transform.position.y, taskpos2.transform.position.y - 2, tmanager.lerp * Time.deltaTime);
             this.transform.position = new Vector3(this.transform.position.x, yvalue, this.transform.position.z);
@@ -163,6 +163,7 @@ public class CodeTask : MonoBehaviour
     {
         //if a task is closed
         player.busy = false;
+        desummoning = true;
         this.transform.position = taskpos1.position;
         StartCoroutine(tmanager.FadeEffect(1));
         
@@ -189,7 +190,7 @@ public class CodeTask : MonoBehaviour
         }
         else if (type == 1)
         {
-            
+            desummoning = false;
             card.gameObject.SetActive(false);
         }
     }

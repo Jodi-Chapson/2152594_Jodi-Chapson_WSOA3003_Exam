@@ -16,6 +16,7 @@ public class MopTask : MonoBehaviour
     public GameObject triggernode;
     public GameObject text;
     public GameObject sponge;
+    public bool desummoning;
 
 
 
@@ -68,7 +69,7 @@ public class MopTask : MonoBehaviour
 
 
 
-        if (summoning)
+        if (summoning && !desummoning)
         {
             float yvalue = Mathf.Lerp(this.transform.position.y, taskpos2.transform.position.y - 2, tmanager.lerp * Time.deltaTime);
             this.transform.position = new Vector3(this.transform.position.x, yvalue, this.transform.position.z);
@@ -99,6 +100,7 @@ public class MopTask : MonoBehaviour
         //if a task is closed
         sponge.SetActive(false);
         player.busy = false;
+        desummoning = true;
         this.transform.position = taskpos1.position;
         StartCoroutine(tmanager.FadeEffect(1));
 
@@ -125,7 +127,7 @@ public class MopTask : MonoBehaviour
         }
         else if (type == 1)
         {
-
+            desummoning = false;
             
         }
     }

@@ -72,8 +72,7 @@ public class SusanFOV : MonoBehaviour
                 {
                     float dstToPlayer = Vector3.Distance(transform.position, playertarget.transform.position);
 
-                    //draw ray from enemy to when the player came on their radar
-                    //checks if they are blocked by a shelf
+                    
                     if (!Physics2D.Raycast(transform.position, dirToPlayer, dstToPlayer, levelmask))
                     {
 

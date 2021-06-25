@@ -42,9 +42,25 @@ public class TaskManager : MonoBehaviour
     {
         //each index represents the task
 
+        
+        if (_player.canmove == true)
+        { return; }
+
+        if(_player.interrupted)
+        {
+            return;
+        }
+
+        
+
+
         if (activetaskindex == 0)
         {
             activetask.GetComponent<PunchInTask>().DeSummonTask();
+        }
+        else if (activetaskindex == 1)
+        {
+            activetask.GetComponent<CodeTask>().DesummonTask();
         }
 
 

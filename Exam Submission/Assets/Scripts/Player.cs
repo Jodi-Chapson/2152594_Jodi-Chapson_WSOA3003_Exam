@@ -10,11 +10,14 @@ public class Player : MonoBehaviour
     public Rigidbody2D rb;
     public float Speed;
     public float percentMod;
-
+    public bool interrupted;
+    public int pesteringcustomers;
 
     void Start()
     {
         canmove = true;
+        interrupted = false;
+        pesteringcustomers = 0;
     }
 
     

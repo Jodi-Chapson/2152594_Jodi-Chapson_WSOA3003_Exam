@@ -16,7 +16,7 @@ public class PunchInTask : MonoBehaviour
     
     public GameObject triggernode;
 
-    public bool summoning, desummoning;
+    public bool summoning;
     
 
     public bool countup;
@@ -67,11 +67,7 @@ public class PunchInTask : MonoBehaviour
             this.transform.position = new Vector3(this.transform.position.x, yvalue, this.transform.position.z);
         }
 
-        if (desummoning)
-        {
-            float yvalue = Mathf.Lerp(this.transform.position.y, taskpos1.transform.position.y, tmanager.lerp * Time.deltaTime);
-            this.transform.position = new Vector3(this.transform.position.x, yvalue, this.transform.position.z);
-        }
+        
 
 
 
@@ -128,7 +124,7 @@ public class PunchInTask : MonoBehaviour
         }
         else if (type == 1)
         {
-            desummoning = false;
+            
             card.gameObject.SetActive(false);
         }
     }
@@ -137,12 +133,12 @@ public class PunchInTask : MonoBehaviour
 
     public void DeSummonTask()
     {
-        
+        this.transform.position = taskpos1.position;
         
         
         //if a task is closed
         StartCoroutine(tmanager.FadeEffect(1));
-        desummoning = true;
+        
         exitbutton.SetActive(false);
         arrow.SetActive(false);
         card.GetComponent<Card>().DeSummon();
@@ -158,16 +154,17 @@ public class PunchInTask : MonoBehaviour
 
     public IEnumerator EndTask()
     {
+        this.transform.position = taskpos1.position;
 
         StartCoroutine(tmanager.FadeEffect(1));
 
         card.GetComponent<Card>().DeSummon();
         
         yield return new WaitForSeconds(1f);
-        desummoning = true;
+        
         yield return new WaitForSeconds(1f);
 
-        desummoning = false;
+        
         scantext.text = "SCAN HERE";
         exitbutton.SetActive(false);
         arrow.SetActive(false);

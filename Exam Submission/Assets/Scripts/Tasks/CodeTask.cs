@@ -21,7 +21,7 @@ public class CodeTask : MonoBehaviour
     public float resetTime;
     public bool isResetting = false;
     public bool summoning;
-    public bool desummoning;
+    
 
 
     public void Start()
@@ -66,11 +66,7 @@ public class CodeTask : MonoBehaviour
             this.transform.position = new Vector3(this.transform.position.x, yvalue, this.transform.position.z);
         }
 
-        if (desummoning)
-        {
-            float yvalue = Mathf.Lerp(this.transform.position.y, taskpos1.transform.position.y, tmanager.lerp * Time.deltaTime);
-            this.transform.position = new Vector3(this.transform.position.x, yvalue, this.transform.position.z);
-        }
+        
 
     }
 
@@ -162,8 +158,9 @@ public class CodeTask : MonoBehaviour
     public void DesummonTask()
     {
         //if a task is closed
+        this.transform.position = taskpos1.position;
         StartCoroutine(tmanager.FadeEffect(1));
-        desummoning = true;
+        
         exit.SetActive(false);
         arrow.SetActive(false);
         card.GetComponent<Card>().DeSummon();
@@ -187,7 +184,7 @@ public class CodeTask : MonoBehaviour
         }
         else if (type == 1)
         {
-            desummoning = false;
+            
             card.gameObject.SetActive(false);
         }
     }

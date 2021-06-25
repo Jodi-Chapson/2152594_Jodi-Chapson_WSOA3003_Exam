@@ -10,6 +10,8 @@ public class BasicEnemy : MonoBehaviour
 
     [Header("References")]
     public Rigidbody2D susanrb;
+    public TaskManager tmanager;
+    public Player player;
     
     
     public float speed;
@@ -325,7 +327,30 @@ public class BasicEnemy : MonoBehaviour
 
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            Debug.Log("player omg senpai");
+            player = collision.gameObject.GetComponent<Player>();
 
+            //susan will notify the boss and interrupt the player if they are busy
+            tmanager.Interrupt();
+            player.interrupted = true;
+
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            player.interrupted = false;
+
+        }
+        
+        
+    }
 
 
 

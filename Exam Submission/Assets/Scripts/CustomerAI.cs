@@ -1,12 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CustomerAI : MonoBehaviour
 {
-    public enum AIState { PATROL, IDLE, TRACK}
+    public enum AIState { PATROL, IDLE, TRACK, PESTERING}
 
     [Header("References")]
+    public Player player;
+    public TaskManager tmanager;
     public LayerMask raymask;
     public Vector3 direction;
     public Vector3 endpoint;
@@ -20,21 +23,39 @@ public class CustomerAI : MonoBehaviour
     public float walkspeed, chasespeed;
 
 
-    
-    
-    
+    [Header("Pestering References")]
+    public GameObject dialoguebox;
+    public Text dialogue;
+    public string[] dialogueoptions;
+    public int[] dialoguechoices;
+    public int correctchoice;
+    public float pesteringCD;
+    public float currentCD;
+    public bool onCD;
+
+
 
     void Start()
     {
         
         state = AIState.IDLE;
         Scan();
+        onCD = false;
     }
 
     // Update is called once per frame
     void Update()
     {
      
+        if (currentCD > 0)
+        {
+            currentCD -= Time.deltaTime;
+        }
+        else
+        {
+            onCD = false;
+        }
+
         if (state == AIState.PATROL)
         {
             speed = walkspeed;
@@ -43,7 +64,7 @@ public class CustomerAI : MonoBehaviour
         {
             speed = chasespeed;
         }
-        else if (state == AIState.IDLE)
+        else if (state == AIState.IDLE || state == AIState.PESTERING)
         {
             speed = 0;
         }
@@ -61,7 +82,7 @@ public class CustomerAI : MonoBehaviour
         }
 
 
-        if (transform.position == target)
+        if (transform.position == target && state != AIState.PESTERING)
         {
             if (state == AIState.PATROL)
             {
@@ -79,19 +100,20 @@ public class CustomerAI : MonoBehaviour
 
     }
 
+    
+
     public void ApproachPlayer( Vector3 playerpos)
     {
 
-        if (state != AIState.TRACK)
+        if (state != AIState.TRACK && state != AIState.PESTERING && !onCD)
         {
-
-
 
             state = AIState.TRACK;
             target = playerpos;
         }
     }
 
+   
 
 
     public IEnumerator Idle()
@@ -189,7 +211,7 @@ public class CustomerAI : MonoBehaviour
             rayhit += 1;
         }
 
-        if (state != AIState.TRACK)
+        if (state != AIState.TRACK && state != AIState.PESTERING)
         {
             if (rayhit == 2)
             {
@@ -213,5 +235,100 @@ public class CustomerAI : MonoBehaviour
 
         
         
+    }
+
+
+    public IEnumerator PreparingPester()
+    {
+        state = AIState.PESTERING;
+        tmanager.Interrupt();
+        player.interrupted = true;
+        //player.canmove = false;
+        if (!player.canmove)
+        {
+            
+            yield return new WaitForSeconds(1f);
+        }
+        else
+        {
+            player.canmove = false;
+        }
+        player.pesteringcustomers++;
+        Pester();
+    }
+
+    public void Pester()
+    {
+        
+
+        int random = Random.Range(0, 3);
+
+        dialogue.text = dialogueoptions[random];
+        correctchoice = dialoguechoices[random];
+        
+
+        dialoguebox.SetActive(true);
+        
+
+        //instantiates a chatbox 
+        //with a random question
+        //each paired with a random answer
+        
+        Debug.Log("customer being a betch :)");
+    }
+
+
+    public void PassOnResults(int result)
+    {
+        StartCoroutine(Thinking(result));
+    }
+
+    public IEnumerator Thinking(int results)
+    {
+        dialogue.text = "...";
+
+        yield return new WaitForSeconds(0.25f);
+
+
+        if (results == correctchoice)
+        {
+            dialogue.text = ":)";
+            player.pesteringcustomers -= 1;
+
+            yield return new WaitForSeconds(0.5f);
+
+
+            dialogue.text = "...";
+            dialoguebox.SetActive(false);
+            if (player.pesteringcustomers == 0)
+            {
+                player.canmove = true;
+            }
+
+            currentCD = pesteringCD;
+            onCD = true;
+            state = AIState.IDLE;
+            Scan();
+
+        }
+        else
+        {
+            Debug.Log("incorrect");
+            Pester();
+        }
+
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            player = collision.gameObject.GetComponent<Player>();
+
+            if (state != AIState.PESTERING)
+            {
+                StartCoroutine(PreparingPester());
+            }
+        }
     }
 }

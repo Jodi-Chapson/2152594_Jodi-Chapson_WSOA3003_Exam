@@ -10,6 +10,8 @@ public class TaskTrigger : MonoBehaviour
     public GameObject task;
     public int taskIndex;
     public bool activated;
+    public Player player;
+    
     
 
     public void Start()
@@ -25,11 +27,11 @@ public class TaskTrigger : MonoBehaviour
 
         if(canInteract)
         {
-            if(Input.GetKeyDown("e"))
+            if(Input.GetKeyDown("e") && player.interrupted == false)
             {
                 canInteract = false;
                 outline.enabled = false;
-                Debug.Log("interacted");
+                //Debug.Log("interacted");
 
                 //summon the appropriate task
 
@@ -72,7 +74,8 @@ public class TaskTrigger : MonoBehaviour
 
             if (collision.gameObject.tag == "Player")
             {
-                Debug.Log("interact with task");
+                player = collision.gameObject.GetComponent<Player>();
+                //Debug.Log("interact with task");
                 outline.enabled = true;
                 canInteract = true;
             }
@@ -83,7 +86,7 @@ public class TaskTrigger : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            Debug.Log("goodbye");
+            //Debug.Log("goodbye");
             outline.enabled = false;
             canInteract = false;
         }

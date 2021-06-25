@@ -14,6 +14,7 @@ public class PunchInTask : MonoBehaviour
     public Transform taskpos1;
     public Transform taskpos2;
     
+    
     public GameObject triggernode;
 
     public bool summoning;
@@ -25,6 +26,7 @@ public class PunchInTask : MonoBehaviour
         countup = false;
         //this.transform.position = tmanager.taskpos1.position;
         tmanager.tasknumber++;
+        this.gameObject.SetActive(false);
         
     }
 
@@ -50,6 +52,7 @@ public class PunchInTask : MonoBehaviour
             if (!tmanager.canleave)
             {
                 scantext.text = "WELCOME :)";
+                tmanager.signedin = true;
                 triggernode.GetComponent<TaskTrigger>().activated = false;
                 StartCoroutine(EndTask());
             }

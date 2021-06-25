@@ -9,6 +9,11 @@ public class TaskManager : MonoBehaviour
     public bool canleave;
     public Animator Fade;
     public Player _player;
+    public DoorController shopdoors;
+    public TaskTrigger punchinnode;
+    public GameObject endscreen;
+    public GameObject tasklist;
+    public bool signedin;
 
 
 
@@ -30,12 +35,15 @@ public class TaskManager : MonoBehaviour
     //etc etc, add as we go
 
 
+     
+
 
     public void Unlock()
     {
         //doors open
 
         Debug.Log("doors are open");
+        shopdoors.MoveDoors();
     }
 
     public void Interrupt()
@@ -73,11 +81,29 @@ public class TaskManager : MonoBehaviour
 
     public void Update()
     {
+
+        if (signedin)
+        {
+            if (Input.GetKeyDown("tab"))
+            {
+                tasklist.SetActive(true);
+            }
+        }
+
+        if (Input.GetKeyUp("tab"))
+        {
+            tasklist.SetActive(false);
+        }
+        
+        
         if (completedtask != 0)
         {
             if (completedtask >= tasknumber)
             {
                 canleave = true;
+                punchinnode.activated = true;
+                punchinnode.outline.enabled = true;
+
             }
         }
     }
@@ -91,11 +117,11 @@ public class TaskManager : MonoBehaviour
 
         if (conclusion == 0)
         {
-
+            endscreen.SetActive(true);
         }
         else if (conclusion == 1)
         {
-
+            endscreen.SetActive(true);
         }
 
 

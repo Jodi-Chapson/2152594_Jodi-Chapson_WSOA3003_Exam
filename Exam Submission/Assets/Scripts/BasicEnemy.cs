@@ -12,6 +12,9 @@ public class BasicEnemy : MonoBehaviour
     public Rigidbody2D susanrb;
     public TaskManager tmanager;
     public Player player;
+    public bool isBoss;
+    public BasicEnemy boss;
+    
     
     
     public float speed;
@@ -38,7 +41,12 @@ public class BasicEnemy : MonoBehaviour
         
         
         state = AIState.IDLE;
-        Scan();
+
+        if (!isBoss)
+        { 
+            Scan(); 
+        }
+
     }
 
     public void Scan()
@@ -138,8 +146,9 @@ public class BasicEnemy : MonoBehaviour
             susanrb.transform.position = Vector3.MoveTowards(transform.position, playerposition, speed * Time.deltaTime);
         }
 
-
-        if (susanrb.transform.position == target.transform.position && state == AIState.PATROL)
+        if (state != AIState.IDLE)
+        { 
+            if (susanrb.transform.position == target.transform.position && state == AIState.PATROL)
         {
             if (state != AIState.IDLE)
             {
@@ -148,12 +157,15 @@ public class BasicEnemy : MonoBehaviour
             }
         }
 
-        if(state == AIState.TRACK && susanrb.transform.position == playerposition)
-        {
-            if (state != AIState.IDLE)
+        
+        
+            if (state == AIState.TRACK && susanrb.transform.position == playerposition)
             {
-                StartCoroutine(Pause(5));
-                state = AIState.IDLE;
+                if (state != AIState.IDLE)
+                {
+                    StartCoroutine(Pause(5));
+                    state = AIState.IDLE;
+                }
             }
         }
 
@@ -237,11 +249,17 @@ public class BasicEnemy : MonoBehaviour
         
     }
 
+    
+
 
     public void Track (Vector3 playerpos)
     {
+        if (!isBoss)
+        {
+            boss.Track(playerpos);
         
-
+        }
+        
         //target.position = playerpos;
 
         //casts 4 rays from the feet position of Susan to the player, to see if she can follow
@@ -327,6 +345,11 @@ public class BasicEnemy : MonoBehaviour
 
     }
 
+    public void ReleaseBoss()
+    {
+        Scan();
+    }
+    
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Player")
@@ -338,6 +361,15 @@ public class BasicEnemy : MonoBehaviour
             tmanager.Interrupt();
             player.interrupted = true;
 
+
+
+
+            if (isBoss)
+            {
+                tmanager.End(0);
+                player.canmove = false;
+            }
+
         }
     }
 
@@ -346,6 +378,10 @@ public class BasicEnemy : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             player.interrupted = false;
+        }
+            
+            
+            
 
         }
         
@@ -354,7 +390,7 @@ public class BasicEnemy : MonoBehaviour
 
 
 
-}
+
 
 
 

@@ -7,6 +7,7 @@ public class DoorController : MonoBehaviour
     public GameObject leftdoor, rightdoor;
     public bool doorsmove;
     public Vector3 leftnewpos, rightnewpos;
+    public TaskManager tmanager;
 
     public void Start()
     {
@@ -43,6 +44,13 @@ public class DoorController : MonoBehaviour
 
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            tmanager.End(0);
+        }
+    }
 
 
     public void MoveDoors()

@@ -91,6 +91,7 @@ public class CodeTask : MonoBehaviour
         {
             Debug.Log("yippie ka yey i cant spell");
             inputCode.text = "CORRECT";
+            tmanager.completedtask++;
             triggernode.GetComponent<TaskTrigger>().activated = false;
             StartCoroutine(Reset(0));
 

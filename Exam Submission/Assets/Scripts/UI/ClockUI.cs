@@ -11,6 +11,8 @@ public class ClockUI : MonoBehaviour
     public float maxTime;
     public float bossTime;
     public float time;
+    public DoorController doorcontrol;
+    public BasicEnemy boss;
 
     public bool delayed;
     public float delaytime;
@@ -62,7 +64,12 @@ public class ClockUI : MonoBehaviour
         {
             Debug.Log("boss");
             bossreleased = true;
+
+            doorcontrol.MoveDoors();
+            boss.Scan();
         }
+
+        
 
 
 

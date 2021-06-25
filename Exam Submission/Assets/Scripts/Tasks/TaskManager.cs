@@ -12,11 +12,14 @@ public class TaskManager : MonoBehaviour
     public DoorController shopdoors;
     public TaskTrigger punchinnode;
     public GameObject endscreen;
+    public GameObject wintext, losetext;
     public GameObject tasklist;
     public bool signedin;
 
     public GameObject tabnotif;
-    public TaskTrigger node0, node1, node2, node3, node4;
+    public TaskTrigger node0, node1, node2, node3, node4, node5;
+    public int mop;
+    public GameObject tick1, tick2, tick3;
 
 
 
@@ -34,11 +37,33 @@ public class TaskManager : MonoBehaviour
     //task indexs:
     // 0 == punchin
     // 1 == keycode
-    // 2 == till
+    // 2 == mop
+    // 3 == till
     //etc etc, add as we go
 
 
-     
+    public void Taskcheck(int index)
+    {
+        if (index == 1)
+        {
+            tick1.SetActive(true);
+        }
+
+        if (index == 2)
+        {
+            mop++;
+
+            if (mop == 3)
+            {
+                tick2.SetActive(true);
+            }
+        }
+
+        if (index == 3)
+        {
+            tick3.SetActive(true);
+        }
+    }
 
 
     public void Unlock()
@@ -84,6 +109,11 @@ public class TaskManager : MonoBehaviour
             activetask.GetComponent<MopTask>().DesummonTask();
         }
 
+        else if (activetaskindex == 3)
+        {
+            activetask.GetComponent<TillTask>().DesummonTask();
+        }
+
 
 
 
@@ -95,6 +125,7 @@ public class TaskManager : MonoBehaviour
         node2.activated = true;
         node3.activated = true;
         node4.activated = true;
+        node5.activated = true;
         tabnotif.SetActive(true);
     }
 
@@ -148,10 +179,12 @@ public class TaskManager : MonoBehaviour
         if (conclusion == 0)
         {
             endscreen.SetActive(true);
+            wintext.SetActive(true);
         }
         else if (conclusion == 1)
         {
             endscreen.SetActive(true);
+            losetext.SetActive(true);
         }
 
 

@@ -52,10 +52,14 @@ public class TaskTrigger : MonoBehaviour
                 }
                 else if (taskIndex == 2)
                 {
-                    //till task
+                    //mop task
                     //will add this later
                     task.GetComponent<MopTask>().SummonTask();
                     
+                }
+                else if (taskIndex == 3)
+                {
+                    task.GetComponent<TillTask>().SummonTask();
                 }
 
 

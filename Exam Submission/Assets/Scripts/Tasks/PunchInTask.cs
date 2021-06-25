@@ -182,6 +182,7 @@ public class PunchInTask : MonoBehaviour
 
 
         tmanager.completedtask++;
+        tmanager.Taskcheck(0);
         card.gameObject.SetActive(false);
         
 

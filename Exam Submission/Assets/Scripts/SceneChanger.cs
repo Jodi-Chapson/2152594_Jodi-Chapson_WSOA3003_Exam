@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class SceneChanger : MonoBehaviour
 {
-    
+    public GameObject htp1, htp2;
 
 
     public void Scenechanger(int level)
@@ -36,6 +36,21 @@ public class SceneChanger : MonoBehaviour
     {
         //set active
         target.SetActive(true);
+    }
+
+
+    public void HTP( int type)
+    {
+        if (type == 0)
+        {
+            htp1.SetActive(false);
+            htp2.SetActive(true);
+        }
+        else
+        {
+            htp1.SetActive(true);
+            htp2.SetActive(false);
+        }
     }
 
     

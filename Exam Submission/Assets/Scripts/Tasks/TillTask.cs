@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public class MopTask : MonoBehaviour
+public class TillTask : MonoBehaviour
 {
-    public int puddles;
-    public int puddlesleft;
+    
     public Player player;
     public bool summoning;
     public TaskManager tmanager;
@@ -14,42 +12,34 @@ public class MopTask : MonoBehaviour
     public Transform taskpos1, taskpos2;
     public GameObject exit;
     public GameObject triggernode;
-    public GameObject text;
-    public GameObject sponge;
+    
+    public GameObject item1, item2, item3;
 
 
 
     public void Start()
     {
-        puddlesleft = puddles;
+        
         tmanager.tasknumber++;
 
-        
+
     }
 
 
 
-    public void Cleaned()
+    public void Completed()
     {
-        puddlesleft -= 1;
-
-        if (puddlesleft == 0)
-        {
-            Debug.Log("nani");
+        
+        
             //task completed successfully
             tmanager.completedtask++;
-            tmanager.Taskcheck(2);
-            text.SetActive(true);
-            triggernode.GetComponent<TaskTrigger>().activated = false;
+        tmanager.Taskcheck(3);
+        triggernode.GetComponent<TaskTrigger>().activated = false;
 
+
+        DesummonTask();
             
-
-            DesummonTask();
-
-
-
-
-        }
+        
 
 
     }
@@ -58,13 +48,7 @@ public class MopTask : MonoBehaviour
 
     public void Update()
     {
-        //for testing purposes
-
-
-        //if (Input.GetKeyDown("w"))
-        //{
-        //    SummonTask();
-        //}
+        
 
 
 
@@ -83,28 +67,33 @@ public class MopTask : MonoBehaviour
     public void SummonTask()
     {
         player.busy = true;
-        sponge.SetActive(true);
-        
+        item1.SetActive(true);
+        item2.SetActive(true);
+        item3.SetActive(true);
+
 
         StartCoroutine(tmanager.FadeEffect(0));
         summoning = true;
         StartCoroutine(ToggleBool(0));
 
-        tmanager.activetaskindex = 2;
+        tmanager.activetaskindex = 3;
         tmanager.activetask = this.gameObject;
     }
 
     public void DesummonTask()
     {
         //if a task is closed
-        sponge.SetActive(false);
+        item1.SetActive(false);
+        item2.SetActive(false);
+        item3.SetActive(false);
+
         player.busy = false;
         this.transform.position = taskpos1.position;
         StartCoroutine(tmanager.FadeEffect(1));
 
         exit.SetActive(false);
 
-        
+
 
 
         StartCoroutine(ToggleBool(1));
@@ -120,14 +109,13 @@ public class MopTask : MonoBehaviour
         if (type == 0)
         {
             summoning = false;
-            
+
             exit.SetActive(true);
         }
         else if (type == 1)
         {
 
-            
+
         }
     }
-
 }

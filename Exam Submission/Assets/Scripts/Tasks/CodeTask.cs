@@ -92,6 +92,7 @@ public class CodeTask : MonoBehaviour
             
             inputCode.text = "CORRECT";
             tmanager.completedtask++;
+            tmanager.Taskcheck(1);
             triggernode.GetComponent<TaskTrigger>().activated = false;
             StartCoroutine(Reset(0));
 
@@ -148,6 +149,7 @@ public class CodeTask : MonoBehaviour
     {
         player.busy = true;
         card.gameObject.SetActive(true);
+        //card.GetComponent<Card>().summoning = true;
         
         StartCoroutine(tmanager.FadeEffect(0));
         summoning = true;

@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
     public bool canmove;
     public Rigidbody2D rb;
     public float Speed;
-    public float percentMod;
+    public float percentMod; 
     public bool interrupted;
     public int pesteringcustomers;
     public bool busy;

@@ -6706,6 +6706,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1929425605}
   Lerp: 0.9
+  CamPos: {x: 0, y: 0, z: 0}
   CamY: 1
   CamFollow: 1
 --- !u!20 &519420031

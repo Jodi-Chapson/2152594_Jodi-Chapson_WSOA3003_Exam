@@ -7,7 +7,7 @@ public class CamController : MonoBehaviour
     [Header("References")]
     public Transform player;
     public float Lerp;
-    private Vector3 CamPos;
+    public Vector3 CamPos;
     public float CamY;
     public bool CamFollow;
 
